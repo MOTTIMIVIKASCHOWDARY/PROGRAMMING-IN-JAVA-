@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIMR // Smart Inventory, Supplier & Predictive Reorder Management Platform</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300f2fe'><path d='M20 7l-8-4-8 4 8 4 8-4zm0 6l-8 4-8-4v6l8 4 8-4v-6z'/></svg>">
+</head>
+<body class="cyber-dark">
+
+  <!-- ========================================================================= -->
+  <!-- 1. LOGIN SCREEN (Visible when not authenticated) -->
+  <!-- ========================================================================= -->
+  <div id="loginView" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-brand">
+          <div class="brand-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="brand-name">SIMR // 2026</div>
+            <div class="brand-tagline">Cyber Inventory &amp; Predictive Reorder</div>
+          </div>
+        </div>
+        <p class="auth-subtitle">Smart Inventory, Supplier and Predictive Reorder Management Platform</p>
+      </div>
+
+      <div class="demo-credentials-banner">
+        <div>Demo Access: <code>admin</code> / <code>admin123</code></div>
+        <button type="button" class="btn-fill-demo" id="btnFillDemo">Auto-Fill</button>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="loginUsername">USER IDENTIFIER</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input type="text" id="loginUsername" class="form-control has-icon" placeholder="Enter username (admin)" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">CYBER PASSKEY</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input type="password" id="loginPassword" class="form-control has-icon" placeholder="Enter password (admin123)" required autocomplete="current-password">
+            <button type="button" class="password-toggle-btn" id="btnTogglePassword" title="Show/Hide Password">
+              <svg id="eyeIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row-between">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMe" checked>
+            <span>Retain session identity</span>
+          </label>
+          <span style="font-size: 0.75rem; color: var(--cyan-neon); font-family: var(--font-mono);">CAPSTONE v2.0 // PRO</span>
+        </div>
+
+        <button type="submit" id="btnLoginSubmit" class="btn btn-primary btn-block">
+          <span id="loginBtnText">AUTHENTICATE &amp; ENTER PLATFORM</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN APPLICATION LAYOUT (Visible when authenticated) -->
+  <!-- ========================================================================= -->
+  <div id="appContainer" class="app-container" style="display: none;">
+
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon-box" style="width: 38px; height: 38px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="sidebar-brand-text">
+          <span class="sidebar-brand-title">SIMR // CYBER</span>
+          <span class="sidebar-brand-sub">Predictive Suite</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Core Operations</div>
+        
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Dashboard HUD</span>
+        </a>
+
+        <a href="#inventory" class="nav-item" data-view="inventory">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+          <span>Inventory Catalog</span>
+        </a>
+
+        <a href="#suppliers" class="nav-item" data-view="suppliers">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          <span>Supplier Matrix</span>
+        </a>
+
+        <a href="#stock" class="nav-item" data-view="stock">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="17 1 21 5 17 9"></polyline>
+            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+            <polyline points="7 23 3 19 7 15"></polyline>
+            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+          </svg>
+          <span>Stock Operations</span>
+        </a>
+
+        <div class="nav-section-title">Futuristic Intelligence</div>
+
+        <a href="#warehouse" class="nav-item" data-view="warehouse">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>Warehouse Digital Twin</span>
+        </a>
+
+        <a href="#reorder" class="nav-item" data-view="reorder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+          <span>Predictive AI Oracle</span>
+          <span class="nav-badge" id="sidebarReorderBadge" style="display: none;">0</span>
+        </a>
+
+        <a href="#purchase-orders" class="nav-item" data-view="purchase-orders">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Purchase Orders</span>
+        </a>
+
+        <a href="#reports" class="nav-item" data-view="reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span>Reports &amp; Auditing</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-widget">
+          <div class="user-avatar" id="sidebarAvatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">Administrator</div>
+            <div class="user-role">Java Capstone Admin</div>
+          </div>
+          <button type="button" class="btn-sidebar-logout" id="btnLogout" title="Logout">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Top Navigation Bar (Futuristic HUD) -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button type="button" class="sidebar-toggle-btn" id="btnSidebarToggle" title="Toggle Sidebar">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="topbar-page-info">
+            <h2 id="topbarTitle">Dashboard HUD</h2>
+            <p id="topbarSubtitle">Real-time inventory telemetry and predictive reorder stream</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Live Telemetry Pill -->
+          <div class="system-status-pill">
+            <span class="status-dot"></span>
+            <span id="systemDbPill">CORE: ONLINE (JAVA 21)</span>
+          </div>
+
+          <!-- Futuristic Voice Assistant Button -->
+          <button type="button" class="btn-hud-control" id="btnVoiceAssistant" title="A.I.V.A. Cyber Voice Assistant">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <span>A.I.V.A.</span>
+          </button>
+
+          <!-- Laser Barcode Scanner HUD Trigger -->
+          <button type="button" class="btn-hud-control" id="btnLaserScanner" title="Open Laser Barcode Scanner">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+              <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+              <line x1="7" y1="12" x2="17" y2="12"></line>
+            </svg>
+            <span>SCAN</span>
+          </button>
+
+          <!-- Cyber Sound FX Toggle -->
+          <button type="button" class="btn-hud-control" id="btnToggleAudio" title="Toggle Sci-Fi Sound FX">
+            <svg id="audioIcon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span id="audioStatusText">SFX: ON</span>
+          </button>
+
+          <!-- Cyber Theme Toggle (Dark Matrix vs Frost Light) -->
+          <button type="button" class="btn-hud-control" id="btnToggleTheme" title="Toggle Theme (Cyber Dark / Frost Light)">
+            <svg id="themeIcon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span id="themeStatusText">THEME</span>
+          </button>
+
+          <!-- Notification Bell -->
+          <div class="notification-wrapper">
+            <button type="button" class="btn-topbar-icon" id="btnNotificationBell" title="Reorder Notifications">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="notification-badge-dot" id="notificationBadge" style="display: none;"></span>
+            </button>
+            <div class="notification-dropdown" id="notificationDropdown">
+              <div class="notification-dropdown-header">
+                <h4>Stock Alerts</h4>
+                <span class="badge badge-low" id="notifCountBadge">0 alerts</span>
+              </div>
+              <div class="notification-list" id="notificationList">
+                <div style="padding: 12px; text-align: center; color: var(--text-muted);">No critical alerts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Viewport Area -->
+      <div class="app-viewport">
+
+        <!-- =================================================================== -->
+        <!-- VIEW 1: DASHBOARD HUD -->
+        <!-- =================================================================== -->
+        <section id="viewDashboard" class="view-section active">
+          <!-- Cyber Quick Action Pills -->
+          <div class="cyber-quick-bar">
+            <div class="quick-action-pill" id="quickBtnScan">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                <line x1="7" y1="12" x2="17" y2="12"></line>
+              </svg>
+              <span>Laser Barcode Scanner</span>
+            </div>
+            <div class="quick-action-pill" onclick="navigate('reorder')">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+              <span>AI Reorder Sandbox</span>
+            </div>
+            <div class="quick-action-pill" onclick="navigate('warehouse')">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span>Warehouse Digital Twin</span>
+            </div>
+            <div class="quick-action-pill" id="quickBtnVoice">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              </svg>
+              <span>Voice Assistant (A.I.V.A.)</span>
+            </div>
+            <div class="quick-action-pill" onclick="navigate('purchase-orders')">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>Purchase Orders</span>
+            </div>
+          </div>
+
+          <!-- 5 Holographic KPI Summary Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Catalog Skus</span>
+                <div class="stat-icon blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statTotalProducts">--</div>
+              <div class="stat-subtext">Active items under telemetry</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Low Stock Alert</span>
+                <div class="stat-icon amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statLowStock" style="color: var(--amber-neon);">--</div>
+              <div class="stat-subtext">At or below reorder threshold</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Critical Depletion</span>
+                <div class="stat-icon red">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statOutOfStock" style="color: var(--rose-neon);">--</div>
+              <div class="stat-subtext">Requires immediate restock</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Supply Partners</span>
+                <div class="stat-icon green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="3" width="15" height="13"></rect>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statTotalSuppliers">--</div>
+              <div class="stat-subtext">Verified vendor network</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Asset Valuation</span>
+                <div class="stat-icon purple">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statInventoryValue" style="color: var(--cyan-neon);">--</div>
+              <div class="stat-subtext">Current asset capitalization</div>
+            </div>
+          </div>
+
+          <!-- Stock Movement Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">
+                  <span style="display:inline-block; width:8px; height:8px; background:var(--cyan-neon); border-radius:50%; box-shadow:0 0 8px var(--cyan-neon);"></span>
+                  Stock Movement Telemetry Overview
+                </h3>
+                <p>Interactive 14-day chronological intake vs outgoing dispatch trends with interactive tooltips</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px; font-size: 0.8125rem;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 10px; height: 10px; background: var(--emerald-neon); border-radius: 50%; box-shadow: 0 0 8px var(--emerald-neon);"></span>
+                  Stock IN
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 10px; height: 10px; background: var(--rose-neon); border-radius: 50%; box-shadow: 0 0 8px var(--rose-neon);"></span>
+                  Stock OUT
+                </span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="stockMovementCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- 2-Column Section: Inventory Alerts + Recent Activity -->
+          <div class="dashboard-grid-2">
+            <!-- Low Stock Alerts -->
+            <div class="card" style="margin-bottom: 0;">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Active Depletion Alerts</h3>
+                  <p>SKUs requiring priority replenishment</p>
+                </div>
+                <a href="#reorder" class="btn btn-sm btn-primary" style="font-size: 0.75rem;">
+                  AI Oracle &rarr;
+                </a>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Current</th>
+                      <th>Threshold</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardAlertsTableBody">
+                    <tr><td colspan="4" style="text-align: center;">Loading alerts...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Recent Activity Feed -->
+            <div class="card" style="margin-bottom: 0;">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Live Transaction Ledger</h3>
+                  <p>Latest verified intake and dispatch events</p>
+                </div>
+                <a href="#stock" class="btn btn-sm btn-secondary" style="font-size: 0.75rem;">
+                  Manage &rarr;
+                </a>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Activity</th>
+                      <th>Quantity</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardActivityTableBody">
+                    <tr><td colspan="3" style="text-align: center;">Loading activities...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 2: INVENTORY CATALOG -->
+        <!-- =================================================================== -->
+        <section id="viewInventory" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Inventory Catalog &amp; SKU Matrix</h2>
+              <p>Monitor products, stock thresholds, unit prices, and scannable barcode labels.</p>
+            </div>
+            <div class="view-header-actions">
+              <button type="button" class="btn btn-secondary" id="btnPrintAllBarcodes">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 9V2h12v7"></path>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Print Barcode Labels</span>
+              </button>
+              <button type="button" class="btn btn-primary" id="btnOpenAddProduct">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Product</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="table-filter-bar">
+            <div class="filter-group">
+              <div class="table-search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="inventorySearchInput" class="form-control" placeholder="Search product name or SKU code...">
+              </div>
+
+              <select id="inventoryCategoryFilter" class="filter-select">
+                <option value="ALL">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Computer Equipment">Computer Equipment</option>
+                <option value="Networking">Networking</option>
+                <option value="Office Supplies">Office Supplies</option>
+              </select>
+
+              <select id="inventoryStatusFilter" class="filter-select">
+                <option value="ALL">All Statuses</option>
+                <option value="Normal">Normal</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Critical">Critical</option>
+                <option value="Out of Stock">Out of Stock</option>
+              </select>
+            </div>
+
+            <span id="inventoryCountBadge" style="font-size: 0.8125rem; color: var(--text-muted); font-family: var(--font-mono);">Showing 0 items</span>
+          </div>
+
+          <!-- Product Table -->
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>SKU Code</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Unit Price</th>
+                    <th>Stock</th>
+                    <th>ROP Threshold</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                  <tr><td colspan="9" style="text-align: center;">Loading inventory items...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 3: SUPPLIER MATRIX -->
+        <!-- =================================================================== -->
+        <section id="viewSuppliers" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Supplier Network &amp; Reliability Matrix</h2>
+              <p>Manage verified vendors, lead times, and fulfillment reliability scores.</p>
+            </div>
+            <div class="view-header-actions">
+              <button type="button" class="btn btn-primary" id="btnOpenAddSupplier">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Supplier</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Company Name</th>
+                    <th>Contact Person</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Lead Time</th>
+                    <th>Reliability</th>
+                    <th>Items</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="suppliersTableBody">
+                  <tr><td colspan="10" style="text-align: center;">Loading suppliers...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 4: STOCK OPERATIONS -->
+        <!-- =================================================================== -->
+        <section id="viewStock" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Stock Operations // Inbound &amp; Outbound</h2>
+              <p>Execute real-time inventory intake and dispatches with guaranteed negative stock protection.</p>
+            </div>
+            <div class="view-header-actions">
+              <button type="button" class="btn btn-secondary" id="btnScanForStockOut">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                  <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                  <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                  <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                </svg>
+                <span>Fast Barcode Scan</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="stock-grid">
+            <!-- Stock IN Form -->
+            <div class="stock-action-card in">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                <div class="stat-icon green" style="width: 32px; height: 32px;">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                  </svg>
+                </div>
+                <h3 style="font-size: 1.125rem;">Stock IN (Replenish Inventory)</h3>
+              </div>
+
+              <form id="formStockIn">
+                <div class="form-group">
+                  <label class="form-label" for="stockInProductSelect">Target Product</label>
+                  <select id="stockInProductSelect" class="form-control" required>
+                    <option value="">-- Choose a product --</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="stockInQuantity">Intake Quantity</label>
+                  <input type="number" id="stockInQuantity" class="form-control" min="1" placeholder="e.g. 20" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="stockInReason">Intake Reference / Note</label>
+                  <input type="text" id="stockInReason" class="form-control" placeholder="e.g. Purchase order delivery / Stock Intake" value="Replenishment Intake">
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">
+                  <span>CONFIRM INTAKE (+ QUANTITY)</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Stock OUT Form -->
+            <div class="stock-action-card out">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                <div class="stat-icon red" style="width: 32px; height: 32px;">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                </div>
+                <h3 style="font-size: 1.125rem;">Stock OUT (Dispatch / Sales Order)</h3>
+              </div>
+
+              <form id="formStockOut">
+                <div class="form-group">
+                  <label class="form-label" for="stockOutProductSelect">
+                    Target Product
+                    <span id="stockOutAvailableNotice" style="float: right; color: var(--cyan-neon); font-family: var(--font-mono);">Available: --</span>
+                  </label>
+                  <select id="stockOutProductSelect" class="form-control" required>
+                    <option value="">-- Choose a product --</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="stockOutQuantity">Dispatch Quantity</label>
+                  <input type="number" id="stockOutQuantity" class="form-control" min="1" placeholder="e.g. 5" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="stockOutReason">Sales Order / Dispatch Reference</label>
+                  <input type="text" id="stockOutReason" class="form-control" placeholder="e.g. Customer Sales Order #SO-1092" value="Customer Sales Order">
+                </div>
+
+                <button type="submit" class="btn btn-danger btn-block">
+                  <span>CONFIRM DISPATCH (- QUANTITY)</span>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Transaction Audit Table -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Verified Transaction Ledger</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tx ID</th>
+                    <th>Product Code</th>
+                    <th>Product Name</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Reference</th>
+                    <th>Timestamp</th>
+                    <th>User</th>
+                  </tr>
+                </thead>
+                <tbody id="stockTransactionsTableBody">
+                  <tr><td colspan="8" style="text-align: center;">Loading transactions...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 5: WAREHOUSE DIGITAL TWIN (2D/ISOMETRIC SPATIAL RACK MATRIX) -->
+        <!-- =================================================================== -->
+        <section id="viewWarehouse" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Warehouse Digital Twin // Spatial Rack Matrix</h2>
+              <p>Interactive spatial mapping of warehouse zones, aisle racks, and shelf slot fill levels.</p>
+            </div>
+            <div class="view-header-actions">
+              <div style="display: flex; align-items: center; gap: 14px; font-size: 0.8125rem;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 10px; height: 10px; background: var(--emerald-neon); border-radius: 2px;"></span>
+                  Optimal (&gt;50%)
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 10px; height: 10px; background: var(--amber-neon); border-radius: 2px;"></span>
+                  Low Stock
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 10px; height: 10px; background: var(--rose-neon); border-radius: 2px;"></span>
+                  Critical / Depleted
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zone Selector Tabs -->
+          <div class="warehouse-zone-nav" id="warehouseZoneNav">
+            <button type="button" class="zone-filter-btn active" data-zone="ALL">All Zones</button>
+            <button type="button" class="zone-filter-btn" data-zone="Electronics">Zone A: Electronics</button>
+            <button type="button" class="zone-filter-btn" data-zone="Networking">Zone B: Networking</button>
+            <button type="button" class="zone-filter-btn" data-zone="Computer Equipment">Zone C: Computer Equipment</button>
+            <button type="button" class="zone-filter-btn" data-zone="Accessories">Zone D: Accessories</button>
+            <button type="button" class="zone-filter-btn" data-zone="Office Supplies">Zone E: Office Supplies</button>
+          </div>
+
+          <!-- Interactive Warehouse Bay Grid -->
+          <div class="warehouse-grid" id="warehouseGridContainer">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 6: PREDICTIVE AI REORDER & SIMULATION SANDBOX -->
+        <!-- =================================================================== -->
+        <section id="viewReorder" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Predictive AI Reorder &amp; Demand Simulation Sandbox</h2>
+              <p>Model supply chain shocks, lead-time variance, and demand spikes to simulate stockout timelines.</p>
+            </div>
+          </div>
+
+          <!-- Smart Reorder Analysis Banner -->
+          <div class="callout-banner">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+            <div class="callout-content" style="flex: 1;">
+              <h3 style="font-size: 1.125rem; margin-bottom: 6px; color: var(--purple-neon);">Dynamic AI Demand Forecasting Algorithm</h3>
+              <p>
+                The predictive engine continuously processes stock-out velocity, supplier lead-time latency, and safety stock buffers.
+                When <strong>Current Stock &le; Reorder Point</strong>, an automated restock recommendation is generated.
+              </p>
+              <div class="formula-chip">
+                Reorder Point (ROP) = (Average Daily Demand &times; Lead Time) + Safety Stock Buffer
+              </div>
+            </div>
+          </div>
+
+          <!-- AI SIMULATION SANDBOX CONTROLS -->
+          <div class="simulation-sandbox-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+              <div>
+                <h3 style="font-size: 1.125rem; color: var(--cyan-neon);">AI Demand &amp; Supply Chain Shock Simulator</h3>
+                <p style="font-size: 0.8125rem;">Adjust parameters to test how market demand surges and supply disruptions affect stockout timelines</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnResetSimulation">Reset to Baseline</button>
+            </div>
+
+            <div class="sandbox-controls-grid">
+              <!-- Slider 1: Demand Surge -->
+              <div class="slider-control-box">
+                <div class="slider-header">
+                  <span>Market Demand Spike</span>
+                  <span class="slider-badge" id="valDemandMultiplier">1.0x (Normal)</span>
+                </div>
+                <input type="range" class="cyber-slider" id="sliderDemand" min="0.5" max="3.0" step="0.1" value="1.0">
+                <span style="font-size: 0.6875rem; color: var(--text-muted);">Simulate seasonal surges, promotional campaigns, or viral demand</span>
+              </div>
+
+              <!-- Slider 2: Lead Time Delay -->
+              <div class="slider-control-box">
+                <div class="slider-header">
+                  <span>Supplier Lead-Time Latency</span>
+                  <span class="slider-badge" id="valLeadTimeDelay">+0 Days</span>
+                </div>
+                <input type="range" class="cyber-slider" id="sliderLeadDelay" min="0" max="14" step="1" value="0">
+                <span style="font-size: 0.6875rem; color: var(--text-muted);">Simulate logistics bottlenecks, customs delays, or freight disruptions</span>
+              </div>
+
+              <!-- Slider 3: Safety Buffer Factor -->
+              <div class="slider-control-box">
+                <div class="slider-header">
+                  <span>Safety Buffer Multiplier</span>
+                  <span class="slider-badge" id="valSafetyBuffer">1.0x</span>
+                </div>
+                <input type="range" class="cyber-slider" id="sliderSafetyBuffer" min="0.5" max="2.5" step="0.25" value="1.0">
+                <span style="font-size: 0.6875rem; color: var(--text-muted);">Adjust risk tolerance buffer against unexpected stockouts</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations Table -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Automated Reorder Recommendations</h3>
+                <p>Dynamically prioritized by depletion risk and lead-time urgency</p>
+              </div>
+              <span id="reorderSummaryBadge" class="badge badge-critical">0 Items Require Reorder</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Current Stock</th>
+                    <th>Daily Demand</th>
+                    <th>Lead Time</th>
+                    <th>Reorder Point</th>
+                    <th>Est. Depletion</th>
+                    <th>Suggested Qty</th>
+                    <th>Supplier</th>
+                    <th>Risk Urgency</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="reorderRecommendationsTableBody">
+                  <tr><td colspan="10" style="text-align: center;">Calculating reorder forecasts...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 7: PURCHASE ORDERS & INVOICES -->
+        <!-- =================================================================== -->
+        <section id="viewPurchaseOrders" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Purchase Orders &amp; Supplier Invoices</h2>
+              <p>Review active procurement orders, expected fulfillment dates, and generate printable PO invoices.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>PO Number</th>
+                    <th>Supplier</th>
+                    <th>Target Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Amount</th>
+                    <th>Expected Delivery</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="purchaseOrdersTableBody">
+                  <tr><td colspan="9" style="text-align: center;">Loading purchase orders...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 8: REPORTS & AUDITING -->
+        <!-- =================================================================== -->
+        <section id="viewReports" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Inventory &amp; Supplier Intelligence Reports</h2>
+              <p>Generate detailed audit sheets, export CSV datasets, and create full system database backups.</p>
+            </div>
+            <div class="view-header-actions">
+              <button type="button" class="btn btn-secondary" id="btnExportReportCsv">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Report Selector Tabs -->
+          <div class="report-tabs">
+            <button type="button" class="report-tab-btn active" data-report="inventory">Inventory Valuation Report</button>
+            <button type="button" class="report-tab-btn" data-report="low-stock">Low Stock &amp; Reorder Alerts</button>
+            <button type="button" class="report-tab-btn" data-report="suppliers">Supplier Directory &amp; Reliability</button>
+            <button type="button" class="report-tab-btn" data-report="stock-movement">Stock Movement Audit Log</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title" id="reportDisplayTitle">Inventory Valuation Report</h3>
+                <p id="reportDisplaySubtitle">Live dataset generated from system database</p>
+              </div>
+              <span id="reportRowCountBadge" style="font-size: 0.8125rem; color: var(--text-muted); font-family: var(--font-mono);">0 records</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="reportDataTable">
+                <thead id="reportTableHead"></thead>
+                <tbody id="reportTableBody">
+                  <tr><td style="text-align: center;">Loading report...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS -->
+  <!-- ========================================================================= -->
+
+  <!-- Modal: Add / Edit Product -->
+  <div class="modal-overlay" id="modalProduct">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalProductTitle">Add New Product</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <form id="formProductModal">
+        <input type="hidden" id="productModalId" value="0">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="prodCode">Product Code / SKU</label>
+              <input type="text" id="prodCode" class="form-control" placeholder="e.g. PRD-1020" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prodCategory">Category</label>
+              <select id="prodCategory" class="form-control" required>
+                <option value="Electronics">Electronics</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Computer Equipment">Computer Equipment</option>
+                <option value="Networking">Networking</option>
+                <option value="Office Supplies">Office Supplies</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodName">Product Name</label>
+            <input type="text" id="prodName" class="form-control" placeholder="e.g. Wireless Noise-Cancelling Headphones" required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="prodSupplier">Assigned Supplier</label>
+              <select id="prodSupplier" class="form-control">
+                <option value="0">-- Select Supplier --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prodUnitPrice">Unit Price (₹)</label>
+              <input type="number" id="prodUnitPrice" class="form-control" step="0.01" min="0.01" placeholder="e.g. 1499.00" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="prodCurrentStock">Current Stock</label>
+              <input type="number" id="prodCurrentStock" class="form-control" min="0" placeholder="e.g. 25" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prodMinimumStock">Minimum Stock (Reorder Level)</label>
+              <input type="number" id="prodMinimumStock" class="form-control" min="1" placeholder="e.g. 10" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="prodMaximumStock">Maximum Stock Capacity</label>
+              <input type="number" id="prodMaximumStock" class="form-control" min="1" placeholder="e.g. 100" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prodReorderQuantity">Standard Reorder Quantity</label>
+              <input type="number" id="prodReorderQuantity" class="form-control" min="1" placeholder="e.g. 30" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveProduct">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Supplier -->
+  <div class="modal-overlay" id="modalSupplier">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalSupplierTitle">Add New Supplier</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <form id="formSupplierModal">
+        <input type="hidden" id="supplierModalId" value="0">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="supCode">Supplier Code</label>
+              <input type="text" id="supCode" class="form-control" placeholder="e.g. SUP-006" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supName">Supplier / Company Name</label>
+              <input type="text" id="supName" class="form-control" placeholder="e.g. OmniTech Logistics Ltd" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="supContact">Contact Person</label>
+              <input type="text" id="supContact" class="form-control" placeholder="e.g. Alex Henderson" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supPhone">Phone Number</label>
+              <input type="text" id="supPhone" class="form-control" placeholder="e.g. +1-555-0199" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="supEmail">Email Address</label>
+              <input type="email" id="supEmail" class="form-control" placeholder="e.g. alex@omnitech.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supLeadTime">Lead Time (Days)</label>
+              <input type="number" id="supLeadTime" class="form-control" min="1" placeholder="e.g. 3" value="3" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="supAddress">Address / Location</label>
+            <input type="text" id="supAddress" class="form-control" placeholder="e.g. 450 Innovation Blvd, Austin, TX" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="supStatus">Status</label>
+            <select id="supStatus" class="form-control">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveSupplier">Save Supplier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: View Product Details & Barcode -->
+  <div class="modal-overlay" id="modalViewProduct">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Product Telemetry &amp; Scannable Barcode</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body" id="viewProductBody">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Create Reorder / Purchase Order -->
+  <div class="modal-overlay" id="modalReorder">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create Purchase Order</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <form id="formCreatePO">
+        <input type="hidden" id="poProductId">
+        <input type="hidden" id="poSupplierId">
+        <div class="modal-body">
+          <div style="background: rgba(0, 242, 254, 0.06); border: 1px solid var(--border-color); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: var(--text-muted); font-size: 0.8125rem;">Target Product:</span>
+              <strong id="poProductName">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: var(--text-muted); font-size: 0.8125rem;">Assigned Supplier:</span>
+              <strong id="poSupplierName">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted); font-size: 0.8125rem;">Current Stock:</span>
+              <strong id="poCurrentStock">--</strong>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="poQuantity">Reorder Quantity</label>
+              <input type="number" id="poQuantity" class="form-control" min="1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="poUnitPrice">Unit Price (₹)</label>
+              <input type="number" id="poUnitPrice" class="form-control" step="0.01" min="0.01" required>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0, 242, 254, 0.12); border: 1px solid var(--cyan-neon); border-radius: var(--radius-sm); margin-top: 8px;">
+            <span style="font-weight: 600; color: var(--text-main);">Estimated Purchase Cost:</span>
+            <span id="poEstimatedTotal" style="font-size: 1.25rem; font-weight: 700; color: var(--cyan-neon); font-family: var(--font-mono);">₹0.00</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">CONFIRM &amp; ISSUE PURCHASE ORDER</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Interactive Laser Barcode Scanner HUD -->
+  <div class="modal-overlay" id="modalLaserScanner">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 style="color: var(--cyan-neon); display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+            <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+          </svg>
+          Laser Barcode Scanner HUD
+        </h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="hud-scanner-viewport">
+          <div class="hud-scanner-grid"></div>
+          <div class="hud-scanner-target">
+            <div class="hud-laser-line"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="manualBarcodeInput">Simulated Barcode Scan (Select Product SKU)</label>
+          <div style="display: flex; gap: 8px;">
+            <select id="scannerSkuSelect" class="form-control">
+              <option value="">-- Choose product barcode to scan --</option>
+            </select>
+            <button type="button" class="btn btn-primary" id="btnExecuteLaserScan">SCAN</button>
+          </div>
+        </div>
+
+        <div id="scannerResultBox" style="display: none; padding: 14px; background: rgba(16, 185, 129, 0.12); border: 1px solid var(--emerald-neon); border-radius: var(--radius-sm); margin-top: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong id="scannedProdName" style="color: var(--emerald-neon);">--</strong>
+            <span class="badge badge-normal" id="scannedProdStock">0 In Stock</span>
+          </div>
+          <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;" id="scannedProdMeta">SKU: -- | Unit Price: ₹--</div>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button type="button" class="btn btn-sm btn-danger" id="btnQuickDispatchScanned">Fast Dispatch (-1)</button>
+            <button type="button" class="btn btn-sm btn-success" id="btnQuickRestockScanned">Fast Restock (+10)</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close Scanner</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Printable Barcode Labels Sheet -->
+  <div class="modal-overlay" id="modalBarcodeLabels">
+    <div class="modal-card" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>Product Barcode Label Sheet (Print-Ready)</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body" id="barcodeSheetBody" style="max-height: 70vh;">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9V2h12v7"></path>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print Barcode Sheet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Printable Official Purchase Order Invoice -->
+  <div class="modal-overlay" id="modalPOInvoice">
+    <div class="modal-card" style="max-width: 750px;">
+      <div class="modal-header">
+        <h3>Official Purchase Order Invoice</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body" id="poInvoiceBody" style="max-height: 70vh;">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9V2h12v7"></path>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print Purchase Order
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: A.I.V.A. Cyber Voice Assistant HUD -->
+  <div class="modal-overlay" id="modalVoiceAssistant">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 style="color: var(--cyan-neon); display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          </svg>
+          A.I.V.A. // Voice Assistant
+        </h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="voice-hud-container">
+          <div class="voice-orb">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#000" stroke-width="2.5">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            </svg>
+          </div>
+
+          <div class="sound-wave-bars">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+
+          <div id="voiceStatusText" style="font-size: 0.9375rem; font-weight: 600; color: var(--cyan-neon); margin-bottom: 8px;">
+            Awaiting speech input... Click "Listen" below
+          </div>
+          <div id="voiceTranscriptBox" style="font-size: 0.8125rem; color: var(--text-muted); min-height: 38px; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 16px;">
+            Speak a command like: "Show alerts", "Open warehouse", "Switch theme", "Restock Keyboard"
+          </div>
+
+          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" id="btnStartVoiceListen">
+              <span>🎙️ Listen Now</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnVoiceDemoSpeech">
+              <span>🔊 Test Voice Synthesis</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Delete -->
+  <div class="modal-overlay" id="modalDeleteConfirm">
+    <div class="modal-card" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 style="color: var(--rose-neon);">Confirm Deletion</h3>
+        <button type="button" class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="deleteConfirmMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDeleteAction">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript Scripts -->
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
